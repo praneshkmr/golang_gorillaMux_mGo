@@ -7,12 +7,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var database = "mGoMuxRest"
 var collection = "counters"
 
 // GetNextCounter return new ID for the Resource passed as Argument
 func GetNextCounter(resource string) (int, error) {
 	session := mongo.GetMongoSession()
+	database := mongo.GetDatabase()
 	defer session.Close()
 	counterCollection := session.DB(database).C(collection)
 	query := bson.M{"resource": resource}

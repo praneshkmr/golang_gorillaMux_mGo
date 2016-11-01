@@ -1,0 +1,6 @@
+{
+    "mongoDB":{
+        "host":"localhost",
+        "database":"gorillaMux_mGo_REST"
+    }
+}
