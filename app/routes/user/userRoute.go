@@ -87,10 +87,29 @@ func updateUserByID(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func deleteUserByID(res http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	userIDStr := vars["id"]
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		res.WriteHeader(http.StatusBadRequest)
+		res.Write([]byte("Usage -> /user/:ID where ID is an Integer"))
+		return
+	}
+	_, err = UserService.DeleteUserByID(userID)
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte("Failed to Delete User"))
+		return
+	}
+	res.WriteHeader(http.StatusOK)
+}
+
 // AssignRoutes is used to Setup the REST routes with the appropriate Handlers
 func AssignRoutes(router *mux.Router) {
 	router.HandleFunc("/user", addUser).Methods("POST")
 	router.HandleFunc("/user/{id}", getUserByID).Methods("GET")
 	router.HandleFunc("/user/{id}", updateUserByID).Methods("PUT")
+	router.HandleFunc("/user/{id}", deleteUserByID).Methods("DELETE")
 	http.ListenAndServe(":3000", router)
 }
