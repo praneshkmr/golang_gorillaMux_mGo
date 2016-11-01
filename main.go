@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 	UserRoutes.AssignRoutes(router)
 	http.ListenAndServe(":3000", router)
 }

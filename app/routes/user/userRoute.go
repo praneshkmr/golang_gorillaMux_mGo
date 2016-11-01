@@ -107,9 +107,9 @@ func deleteUserByID(res http.ResponseWriter, req *http.Request) {
 
 // AssignRoutes is used to Setup the REST routes with the appropriate Handlers
 func AssignRoutes(router *mux.Router) {
-	router.HandleFunc("/user", addUser).Methods("POST")
-	router.HandleFunc("/user/{id}", getUserByID).Methods("GET")
-	router.HandleFunc("/user/{id}", updateUserByID).Methods("PUT")
-	router.HandleFunc("/user/{id}", deleteUserByID).Methods("DELETE")
-	http.ListenAndServe(":3000", router)
+	subRoute := router.PathPrefix("/users").Subrouter()
+	subRoute.HandleFunc("/", addUser).Methods("POST")
+	subRoute.HandleFunc("/{id}", getUserByID).Methods("GET")
+	subRoute.HandleFunc("/{id}", updateUserByID).Methods("PUT")
+	subRoute.HandleFunc("/{id}", deleteUserByID).Methods("DELETE")
 }
