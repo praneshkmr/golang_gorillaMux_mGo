@@ -35,7 +35,7 @@ func GetUser(id int) (*model.User, error) {
 }
 
 //UpdateUser is the function to update User data by Id
-func UpdateUser(id int, user model.User) (*model.User, error) {
+func UpdateUser(id int, user *model.User) (*model.User, error) {
 	session := mongo.GetMongoSession()
 	defer session.Close()
 	userCollection := session.DB(database).C(collection)
@@ -45,7 +45,7 @@ func UpdateUser(id int, user model.User) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return user, nil
 }
 
 //DeleteUser is the function to delete User by Id

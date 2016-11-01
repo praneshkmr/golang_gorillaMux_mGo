@@ -3,38 +3,32 @@ package main
 import (
 	"log"
 
-	Counter "./app/dao/mongo/counter"
-	User "./app/dao/mongo/user"
 	"./app/model"
+	UserService "./app/service/user"
 )
 
 func main() {
-	id, err := Counter.GetNextCounter("user")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	user := model.User{ID: id, Name: "Pranesh Kumar", Email: "praneshkmr@gmail.com", Password: "temp123"}
-	_, err = User.AddUser(&user)
+	user := model.User{Name: "Pranesh Kumar", Email: "praneshkmr@gmail.com", Password: "temp123"}
+	_, err := UserService.AddUser(&user)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Inserted")
 
-	user2, err := User.GetUser(user.ID)
+	user2, err := UserService.GetUserByID(user.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println(user2)
 
 	user.Password = "temp1234"
-	user3, err := User.UpdateUser(user.ID, user)
+	user3, err := UserService.UpdateUserByID(user.ID, &user)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println(user3)
 
-	isDeleted, err := User.DeleteUser(user.ID)
+	isDeleted, err := UserService.DeleteUserByID(user.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
