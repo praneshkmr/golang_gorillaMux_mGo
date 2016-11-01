@@ -3,6 +3,7 @@ package counter
 import (
 	"./../../../model"
 	"./../../mongo"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -14,14 +15,14 @@ func GetNextCounter(resource string) (int, error) {
 	session := mongo.GetMongoSession()
 	defer session.Close()
 	counterCollection := session.DB(database).C(collection)
-	selector := bson.M{"resource": resource}
-	update := bson.M{"$inc": bson.M{"c": 1}}
-	_, err := counterCollection.Upsert(selector, update)
-	if err != nil {
-		return 0, err
+	query := bson.M{"resource": resource}
+	update := mgo.Change{
+		Update:    bson.M{"$inc": bson.M{"c": 1}},
+		ReturnNew: true,
+		Upsert:    true,
 	}
 	counter := model.Counter{}
-	err = counterCollection.Find(bson.M{"resource": resource}).One(&counter)
+	_, err := counterCollection.Find(query).Apply(update, &counter)
 	if err != nil {
 		return 0, err
 	}
