@@ -1,7 +1,8 @@
-package mongo
+package user
 
 import (
-	"./../../model"
+	"./../../../model"
+	"./../../mongo"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -10,7 +11,7 @@ var collection = "users"
 
 //AddUser is the function to add new User
 func AddUser(user *model.User) (*model.User, error) {
-	session := getMongoSession()
+	session := mongo.GetMongoSession()
 	defer session.Close()
 	userCollection := session.DB(database).C(collection)
 	err := userCollection.Insert(user)
@@ -22,7 +23,7 @@ func AddUser(user *model.User) (*model.User, error) {
 
 //GetUser is the function to retrieve User by Id
 func GetUser(id int) (*model.User, error) {
-	session := getMongoSession()
+	session := mongo.GetMongoSession()
 	defer session.Close()
 	var user model.User
 	userCollection := session.DB(database).C(collection)
@@ -35,7 +36,7 @@ func GetUser(id int) (*model.User, error) {
 
 //UpdateUser is the function to update User data by Id
 func UpdateUser(id int, user model.User) (*model.User, error) {
-	session := getMongoSession()
+	session := mongo.GetMongoSession()
 	defer session.Close()
 	userCollection := session.DB(database).C(collection)
 	query := bson.M{"id": id}
@@ -49,7 +50,7 @@ func UpdateUser(id int, user model.User) (*model.User, error) {
 
 //DeleteUser is the function to delete User by Id
 func DeleteUser(id int) (bool, error) {
-	session := getMongoSession()
+	session := mongo.GetMongoSession()
 	defer session.Close()
 	userCollection := session.DB(database).C(collection)
 	err := userCollection.Remove(bson.M{"id": id})

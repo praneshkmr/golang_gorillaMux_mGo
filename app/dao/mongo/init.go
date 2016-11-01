@@ -6,7 +6,8 @@ import (
 
 var session *mgo.Session
 
-func getMongoSession() *mgo.Session {
+// GetMongoSession returns the MGo's Session Object upon Request
+func GetMongoSession() *mgo.Session {
 	if session == nil {
 		session, err := mgo.Dial("localhost")
 		if err != nil {
